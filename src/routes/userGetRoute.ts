@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import { Route } from '../types/route';
 import { getDb } from '../services/db/db';
-
-const getUserScript = `
-  select u.*
-  from Users u
-  where u.id = ?
-`
+import { getUserById } from '../services/db/users';
 
 export const userGetRoute: Route = {
   method: 'get',
@@ -19,16 +14,18 @@ export const userGetRoute: Route = {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    db.get(getUserScript, [userId], (err, row) => {
-      if (err) {
-        console.error('DB error:', err);
-      } else {
-        if (!row) {
-          return res.status(404).json({ error: 'User not found'});
-        } else {
+    getUserById(userId)
+      .then((row) => {
+        if (row) {
           return res.json(row);
+        } else {
+          return res.status(404).json({ error: 'User not found'});
         }
-      }
-    });
+      })
+      .catch((error) => {
+        console.error('DB error:', error);
+        return res.status(500).json({ error: 'Db error'});
+      });
+
   }
 }
