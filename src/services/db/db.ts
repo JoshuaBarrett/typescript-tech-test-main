@@ -21,6 +21,21 @@ export const initDb = (): Promise<void> =>
     ));
   });
 
+export const initTestDb = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    db = new Database(':memory:');
+    const schemaSql = fs.readFileSync(schemaFilePath, 'utf-8');
+    db.serialize(() => {
+      db.exec(schemaSql, (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  });
+
 export const getDb = (): Database => {
   if (db) {
     return db;
