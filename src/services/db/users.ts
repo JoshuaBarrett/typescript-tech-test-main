@@ -4,8 +4,8 @@ export interface userSignup {
     fullName: string;
     password: string;
     emailAddress: string;
-    createdDate: Date;
-    userType: "student" | "teacher" | "parent" | "privatetutor";
+    createdDate: string;
+    userType: string;
 }
 
 const getUserByIdScript = `
