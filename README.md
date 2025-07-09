@@ -1,3 +1,59 @@
+## Database
+Opted for a single table for simplicity, would likely use fullSchema.sql in future to normalise UserTypes to maintain proper RDBMS design principles
+
+## Api Endpoints
+
+# POST /users/signup
+Registers a new user
+
+Request Body - JSON
+
+- Example
+{
+
+    "fullName": "Jane Doe",
+    "password": "Password1!",
+    "emailAddress": "janedoe@gmail.com",
+    "createdDate": "2025-07-08",
+    "userType": "student"
+}
+
+Responses:
+
+- 201: User created - { id: number } retured
+- 400: { error: Validation error, details: string[] } if validation fails
+- 500: db errors
+
+# GET /users/:userid
+Retrieves a single user by Id
+
+Responses:
+
+- 200: returns the user
+- 400: if id is not valid
+- 404: if no user is found
+- 500: db errors
+
+Notes: Basic numeric check is done inline instead of zod
+
+
+## Tests
+
+Jest performs tests directly on api endpoints ('/users/signup', 'users/:userid') just like an external client would.
+Covers full validation logic and all db interation
+SQL Lite db is run in-memory with some prepopulated data via 'initTestDb()'
+
+
+
+
+
+
+
+
+
+
+
+
 # Twinkl TypeScript Test
 
 - [Task](#task)
@@ -28,8 +84,8 @@ These are the requirements for the system:
 * Submit something that we can run locally
 * Commiting changes with good messages as you go is very helpful
 * You can update the README or add a NOTES.md detailing any decisions/tradeoffs you made, or changes you would make with more time
-* Clean, secure, modular code written to your own standards of what good looks like. Add concise comments in the code if you want to explain a decision. 
-* Pragmatism. We are not looking for complex solutions, and there is no hidden trick requirement in our task ;) 
+* Clean, secure, modular code written to your own standards of what good looks like. Add concise comments in the code if you want to explain a decision.
+* Pragmatism. We are not looking for complex solutions, and there is no hidden trick requirement in our task ;)
 * Feel free to install and use additional packages
 
 ## Setup
@@ -73,7 +129,7 @@ In development the following command will start the server and use `nodemon` to 
 npm run dev
 ```
 
-The server will start at `http://localhost:3000` by default. You can change the port in `src/index.ts` 
+The server will start at `http://localhost:3000` by default. You can change the port in `src/index.ts`
 
 There are no tests in the project at the moment, but a command is available to run:
 
