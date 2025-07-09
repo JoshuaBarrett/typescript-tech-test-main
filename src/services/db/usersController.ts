@@ -12,7 +12,12 @@ const getUserByIdScript = `
   select u.*
   from Users u
   where u.id = ?
-`
+`;
+
+const insertUserSql = `
+  INSERT INTO Users(Fullname, Password, EmailAddress, CreatedDate, UserType)
+  VALUES(?, ?, ?, ?, ?)
+`;
 
 export const getUserById = (id: number): Promise<any> => {
   const db = getDb();
@@ -26,11 +31,6 @@ export const getUserById = (id: number): Promise<any> => {
     })
   });
 }
-
-const insertUserSql = `
-  INSERT INTO Users(Fullname, Password, EmailAddress, CreatedDate, UserType)
-  VALUES(?, ?, ?, ?, ?)
-`;
 
 export const addUser = (userSignup: userSignup): Promise<number> => {
   const db = getDb();

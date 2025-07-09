@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
 import { Route } from '../types/route';
-import { getDb } from '../services/db/db';
-import { getUserById } from '../services/db/users';
+import { getUserById } from '../services/db/usersController';
 
 export const userGetRoute: Route = {
   method: 'get',
   path: '/users/:userid',
   handler: (req: Request, res: Response) => {
-    const db = getDb();
-
+    // Could have used Zod here but it felt a little overkill
     const userId = Number(req.params.userid);
     if (isNaN(userId)) {
       return res.status(400).json({ error: 'Invalid user ID' });

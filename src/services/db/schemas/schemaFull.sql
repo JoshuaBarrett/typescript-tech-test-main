@@ -1,3 +1,5 @@
+-- NOT USED Schema
+-- Nomalises UserTypes to a lookup table
 
 CREATE TABLE IF NOT EXISTS UserTypes (
   Id INTEGER  Primary Key,
@@ -19,8 +21,3 @@ CREATE TABLE IF NOT EXISTS Users (
   UserTypeId INT,
   CONSTRAINT FK_Users_UserTypes FOREIGN KEY (UserTypeId) REFERENCES UserTypes(Id)
 );
-
-INSERT OR IGNORE INTO Users (Fullname, Password, EmailAddress, UserTypeId)
-values ('Joshua Barrett', 'c3ab8ff13720e8ad9047dd39466b3c89b4a2f72a5f20141a34bb9b3b7f4b2b6e', 'joshua.barrett@example.com', 4),
-  ('John Doe', 'c3ab8ff13720e8ad9047dd39466b3c89b4a2f72a5f20141a34bb9b3b7f4b2b6e', 'john@example.com', 1),
-  ('Phil Gilbert', 'c3ab8ff13720e8ad9047dd39466b3c89b4a2f72a5f20141a34bb9b3b7f4b2b6e', 'jane@internet.com', 2)

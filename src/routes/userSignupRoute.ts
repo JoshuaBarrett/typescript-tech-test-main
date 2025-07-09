@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { Route } from '../types/route';
-import { addUser } from '../services/db/users';
+import { addUser } from '../services/db/usersController';
 import { userSignupSchema } from '../validators/user';
+import bcrypt from 'bcrypt';
 
 export const userSignupRoute: Route = {
   method: 'post',
   path: '/users/signup',
-  handler: (req: Request, res: Response) => {
+  handler: async (req: Request, res: Response) => {
     const validationResult = userSignupSchema.safeParse(req.body);
 
     if (!validationResult.success) {
@@ -19,6 +20,8 @@ export const userSignupRoute: Route = {
     }
 
     const data = validationResult.data;
+
+    data.password = await bcrypt.hash(data.password, 10);
 
     addUser(data)
       .then((newId) => {
