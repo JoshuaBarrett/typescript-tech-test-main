@@ -1,5 +1,13 @@
 import { getDb } from './db';
 
+export interface userSignup {
+    fullName: string;
+    password: string;
+    emailAddress: string;
+    createdDate: Date;
+    userType: "student" | "teacher" | "parent" | "privatetutor";
+}
+
 const getUserByIdScript = `
   select u.*
   from Users u
@@ -24,13 +32,13 @@ const insertUserSql = `
   VALUES(?, ?, ?, ?, ?)
 `;
 
-export const addUser = (fullname: string, password: string, emailAddress: string, createdDate: Date, userType: string): Promise<number> => {
+export const addUser = (userSignup: userSignup): Promise<number> => {
   const db = getDb();
 
   return new Promise((resolve, reject) => {
     db.run(
       insertUserSql,
-      [fullname, password, emailAddress, createdDate, userType],
+      [userSignup.fullName, userSignup.password, userSignup.emailAddress, userSignup.createdDate, userSignup.userType],
       function (error) {
         if (error) {
           reject(error);
