@@ -2,8 +2,8 @@ import request from 'supertest';
 import app from '../app';
 import { getDb, initTestDb } from '../services/db/db';
 
-beforeAll(async () => {
-  await initTestDb();
+beforeAll(() => {
+  initTestDb();
 });
 
 describe('GET /users/:id', () => {

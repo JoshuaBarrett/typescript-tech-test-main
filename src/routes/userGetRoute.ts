@@ -12,18 +12,16 @@ export const userGetRoute: Route = {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    getUserById(userId)
-      .then((row) => {
-        if (row) {
-          return res.json(row);
-        } else {
-          return res.status(404).json({ error: 'User not found'});
-        }
-      })
-      .catch((error) => {
-        console.error('DB error:', error);
-        return res.status(500).json({ error: 'Db error'});
-      });
-
+    try {
+      const user = getUserById(userId);
+      if (user) {
+        return res.json(user);
+      } else {
+        return res.status(404).json({ error: 'User not found'});
+      }
+    } catch (error) {
+      console.error('DB error:', error);
+      return res.status(500).json({ error: 'Db error'});
+    }
   }
 }

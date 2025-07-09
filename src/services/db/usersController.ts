@@ -1,14 +1,23 @@
 import { getDb } from './db';
 
 export interface userSignup {
-    fullName: string;
-    password: string;
-    emailAddress: string;
-    createdDate: string;
-    userType: string;
+  fullName: string;
+  password: string;
+  emailAddress: string;
+  createdDate: string;
+  userType: string;
 }
 
-const getUserByIdScript = `
+interface User {
+  id: number,
+  fullName: string,
+  password: string,
+  emailAddress: string,
+  createdDate: string,
+  userType: string
+}
+
+const getUserByIdSql = `
   select u.*
   from Users u
   where u.id = ?
@@ -19,33 +28,24 @@ const insertUserSql = `
   VALUES(?, ?, ?, ?, ?)
 `;
 
-export const getUserById = (id: number): Promise<any> => {
+export const getUserById = (id: number): User | undefined => {
   const db = getDb();
-  return new Promise((resolve, reject) => {
-    db.get(getUserByIdScript, [id], (err, row) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(row);
-      }
-    })
-  });
+  const stmt = db.prepare(getUserByIdSql);
+  const row = stmt.get(id);
+  return row as User | undefined;
 }
 
-export const addUser = (userSignup: userSignup): Promise<number> => {
+export const addUser = (userSignup: userSignup): Number | bigint => {
   const db = getDb();
+  const stmt = db.prepare(insertUserSql);
 
-  return new Promise((resolve, reject) => {
-    db.run(
-      insertUserSql,
-      [userSignup.fullName, userSignup.password, userSignup.emailAddress, userSignup.createdDate, userSignup.userType],
-      function (error) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(this.lastID);
-        }
-      }
-    )
-  });
+  const runResult = stmt.run(
+    userSignup.fullName,
+    userSignup.password,
+    userSignup.emailAddress,
+    userSignup.createdDate,
+    userSignup.userType
+  );
+
+  return runResult.lastInsertRowid;
 }

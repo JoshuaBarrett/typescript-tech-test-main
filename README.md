@@ -44,6 +44,9 @@ Covers full validation logic and all db interation
 SQL Lite db is run in-memory with some prepopulated data via 'initTestDb()'
 
 
+## Migration from sqllite3 to better-sqllite3
+Migrated to better-sqllite3 as the sync calls allow for cleaner faster code and avoids callback hell
+-- Reran tests are all passed afte migration :)
 
 
 

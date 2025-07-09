@@ -21,14 +21,15 @@ export const userSignupRoute: Route = {
 
     const data = validationResult.data;
 
+    // Using bycrypt vs built in cypto as bycrypt is more secure, built-in salt etc.
     data.password = await bcrypt.hash(data.password, 10);
 
-    addUser(data)
-      .then((newId) => {
-        return res.status(201).json({ id: newId });
-      })
-      .catch((error) => {
-        return res.status(500).json({ message: 'Db error', error});
-      });
+    try {
+      const newId = addUser(data);
+      return res.status(201).json({ id: newId });
+    } catch (error) {
+      console.error('DB error:', error);
+      return res.status(500).json({ message: 'Db error', error});
+    }
   }
 }
